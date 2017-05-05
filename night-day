@@ -1,0 +1,24 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Night/Day
+# Applicability=all
+# Input=nothing
+# Shortcut=<Primary><Alt>d
+# Output=nothing
+# Save-files=nothing
+
+string=`gsettings get org.gnome.gedit.preferences.editor scheme`
+
+if [ $string = "'builder-dark'" ];then
+
+    `gsettings set org.gnome.gedit.preferences.editor scheme builder`
+    PLUGINS=$(gsettings get org.gnome.gedit.plugins active-plugins)
+    PLUGINS=$(echo $PLUGINS | sed "s/, 'darktheme'//g")
+    #`gsettings set org.gnome.Terminal.ProfilesList default '87eb9db2-9006-4852-8ea9-43f6c9ac79a8'` 
+else
+    `gsettings set org.gnome.gedit.preferences.editor scheme builder-dark`
+    PLUGINS=$(gsettings get org.gnome.gedit.plugins active-plugins)
+    PLUGINS=$(echo $PLUGINS | sed "s/]/, 'darktheme']/g")
+    #`gsettings set org.gnome.Terminal.ProfilesList default '42ea7ae1-6600-44e5-a4fb-9f8647cf879c'`
+fi
+`gsettings set org.gnome.gedit.plugins active-plugins "$PLUGINS"`

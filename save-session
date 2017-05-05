@@ -1,0 +1,21 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Session Save
+# Save-files=all
+# Applicability=all
+# Input=document
+# Output=nothing
+# Shortcut=<Primary><Alt>s
+
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+if (( $? == 0 )) ; then
+    export GTK_THEME=Adwaita:dark
+fi
+mkdir -p ~/Projects/Gedit-Sessions/
+FILE=
+
+FILE=`zenity --file-selection --save --title='Save Session As...' --filename="$HOME/Projects/Gedit-Sessions/" 2>/dev/null`
+if [ ! -z "$FILE" ]; then
+	echo $GEDIT_DOCUMENTS_PATH > $FILE
+	echo "Saved session to "$FILE""
+fi

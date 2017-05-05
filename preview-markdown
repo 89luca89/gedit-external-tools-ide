@@ -1,0 +1,14 @@
+#!/bin/sh
+# [Gedit Tool]
+# Input=nothing
+# Save-files=document
+# Output=output-panel
+# Name=Preview Markdown
+# Applicability=all
+# Languages=markdown
+# Shortcut=<Primary><Alt>p
+
+FILENAME=$(echo $GEDIT_CURRENT_DOCUMENT_NAME | tr ' ' '-')
+
+/usr/bin/markdown_py "$GEDIT_CURRENT_DOCUMENT_DIR/$GEDIT_CURRENT_DOCUMENT_NAME" > "/tmp/$FILENAME.html"
+xdg-open "/tmp/$FILENAME.html"

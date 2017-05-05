@@ -1,0 +1,14 @@
+#!/bin/sh
+# [Gedit Tool]
+# Input=nothing
+# Applicability=all
+# Output=output-panel
+# Name=Compile Markdown
+# Save-files=document
+# Languages=markdown
+# Shortcut=<Primary><Alt>h
+
+
+FILENAME=$(echo $GEDIT_CURRENT_DOCUMENT_NAME | tr ' ' '-')
+
+/usr/bin/markdown_py "$GEDIT_CURRENT_DOCUMENT_DIR/$GEDIT_CURRENT_DOCUMENT_NAME" > "/tmp/$FILENAME.html"

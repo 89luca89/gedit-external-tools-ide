@@ -1,0 +1,28 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Build+Debug Gradle
+# Input=nothing
+# Applicability=all
+# Shortcut=<Primary>7
+# Save-files=all
+# Output=output-panel
+
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+FILENAME=/tmp/errors-$(date "+%F-%T").log
+while test "$DIR" != "/"; do
+    for m in gradlew ; do
+        if [ -f "${DIR}/${m}" ]; then
+            echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#"
+            pushd "${DIR}" > /dev/null
+            #./gradlew assembleDebug  2>&1 | grep "error:" | awk '{print $1}' | cut -d ":" -f 1 | uniq
+            ./gradlew assembleDebug  2>&1 | grep "error:" | uniq > $FILENAME
+            popd > /dev/null
+            gedit $FILENAME
+            exit
+        fi
+    done
+    DIR=`dirname "${DIR}"`
+done
+echo "No Gradle found!" > /dev/stderr

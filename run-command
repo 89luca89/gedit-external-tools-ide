@@ -1,0 +1,17 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=new-document
+# Name=Run command
+# Save-files=nothing
+# Applicability=all
+# Input=nothing
+# Languages=
+# Comment=Execute a custom command and put its output in a new document
+# Shortcut=<Primary><Alt>1
+
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+if (( $? == 0 )) ; then
+    export GTK_THEME=Adwaita:dark
+fi
+#TODO: use "gconftool-2 -g /desktop/gnome/applications/terminal/exec"
+eval $(zenity --entry --title="Run Command - gedit" --text="Command to run:")

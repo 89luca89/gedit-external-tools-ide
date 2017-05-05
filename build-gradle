@@ -1,0 +1,26 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Build Gradle
+# Save-files=all
+# Input=nothing
+# Applicability=all
+# Output=output-panel
+# Shortcut=<Primary>8
+
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+while test "$DIR" != "/"; do
+    for m in gradlew ; do
+        if [ -f "${DIR}/${m}" ]; then
+            echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#"
+            pushd "${DIR}" > /dev/null
+            ./gradlew assembleDebug  
+            notify-send -i gedit  -u critical "Compilation " 'Done'
+            popd > /dev/null
+            exit
+        fi
+    done
+    DIR=`dirname "${DIR}"`
+done
+echo "No Gradle found!" > /dev/stderr

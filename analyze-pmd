@@ -1,0 +1,64 @@
+#!/bin/sh
+# [Gedit Tool]
+# Input=nothing
+# Output=output-panel
+# Save-files=nothing
+# Shortcut=<Primary><Alt>space
+# Name=Analyze-PMD
+# Applicability=all
+
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+if (( $? == 0 )) ; then
+        export GTK_THEME=Adwaita:dark
+fi
+TITLE="Analyze the code"
+TEXT="Choose your language"
+TEXT2="Choose your rules (can be multiple)"
+LANG=
+FILENAME=/tmp/pmd-$(date "+%F-%T").log
+CPD="duplicates"
+
+LANG=`zenity --list --title="$TITLE" --text="$TEXT" --width=640 --height=640 --column=Languages $(ls $HOME/Programs/PMD/rules/ | sed 's/.rules//') 2>/dev/null`
+if [ -z $LANG ]; then
+    exit
+fi
+IFS='|' read -r -a languages <<< `echo $LANG`
+RULES=
+for i in ${languages[@]}; do
+    RULES=$RULES' '$(cat $HOME/Programs/PMD/rules/$i.rules)
+done
+if [[ $RULES == " " ]]; then
+    SEL_RULES=$CPD
+else
+    SEL_RULES=`zenity --list --multiple --title="$TITLE" --text="$TEXT2" --width=640 --height=640 --column=Rules $CPD $RULES 2>/dev/null`
+fi
+if [[ $SEL_RULES == "" ]]; then
+    exit
+fi
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+while test "$DIR" != "/"; do
+        for m in GNUmakefile makefile Makefile gradlew Gradle; do
+                if [ -f "${DIR}/${m}" ]; then
+                        echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#" > /dev/stderr
+                        find ${DIR} -name build -type d | xargs rm -r
+                        IFS='|' read -r -a rules <<< `echo $SEL_RULES`
+                        echo -e "Executing the subsequent analysis: "${rules[@]}"\n\n" > $FILENAME
+                        for rule in ${rules[@]}; do
+                            echo "Running $LANG-$rule"
+                            echo -e "$rule \n\n" >> $FILENAME
+                            #$HOME/Programs/PMD/bin/run.sh pmd -d "${DIR}" -f text -R $LANG-$rule
+                            if [ $rule == $CPD ]; then
+                                $HOME/Programs/PMD/bin/run.sh cpd --minimum-tokens 100 --files "${DIR}" --ignore-annotations >> $FILENAME
+                            else
+                                $HOME/Programs/PMD/bin/run.sh pmd -d "${DIR}" -f text -R $LANG-$rule >> $FILENAME
+                            fi
+                            echo -e "\n\n" >> $FILENAME
+                        done
+                        gedit $FILENAME
+                        cat $FILENAME | grep "${DIR}" | wc -l
+                        echo "Warnings found!"
+                        exit
+                fi
+        done
+        DIR=`dirname "${DIR}"`
+done

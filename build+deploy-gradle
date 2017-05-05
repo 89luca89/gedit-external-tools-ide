@@ -1,0 +1,27 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Build+Deploy Gradle
+# Save-files=all
+# Input=nothing
+# Applicability=all
+# Output=output-panel
+# Shortcut=<Primary>9
+
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+while test "$DIR" != "/"; do
+    for m in gradlew ; do
+        if [ -f "${DIR}/${m}" ]; then
+            echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#"
+            pushd "${DIR}" > /dev/null
+            ./gradlew assembleDebug
+            find . -name '*.apk' -type f | xargs /home/luca-linux/Desktop/android-sdk-linux/platform-tools/adb install -r 
+            notify-send -i gedit  -u critical "Compilation And Deploy " 'Done'
+            popd > /dev/null
+            exit
+        fi
+    done
+    DIR=`dirname "${DIR}"`
+done
+echo "No Gradle found!" > /dev/stderr

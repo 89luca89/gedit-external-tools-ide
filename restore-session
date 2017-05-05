@@ -1,0 +1,18 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=Session Restore
+# Save-files=nothing
+# Applicability=all
+# Input=document
+# Output=nothing
+# Shortcut=<Primary><Alt>r
+
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+if (( $? == 0 )) ; then
+    export GTK_THEME=Adwaita:dark
+fi
+FILE=`zenity --file-selection --title="Restore Session " --filename=$HOME/Projects/Gedit-Sessions/ 2>/dev/null`
+if [ ! -z "$FILE" ]; then
+	cat $FILE  | xargs gedit --new-window
+	echo "Restored Session from " $FILE
+fi

@@ -1,0 +1,11 @@
+#!/bin/sh
+# [Gedit Tool]
+# Input=document
+# Name=Indent
+# Output=replace-document
+# Save-files=nothing
+# Applicability=all
+# Shortcut=<Primary><Alt>l
+
+
+sed 's/\t/    /g'
