@@ -19,8 +19,18 @@ while test "$DIR" != "/"; do
             pushd "${DIR}" > /dev/null
             #./gradlew assembleDebug  2>&1 | grep "error:" | awk '{print $1}' | cut -d ":" -f 1 | uniq
             ./gradlew assembleDebug  2>&1 | grep "error:" | uniq > $FILENAME
+            cat $FILENAME  | grep 'cannot find symbol'
+            if (( $? == 0 )); then
+                CLASSESS=($(cat /tmp/test | grep 'symbol:' | awk '{print $3}'))
+                pushd "$HOME/.local/share/Zeal/Zeal/docsets/Java_SE8.docset/Contents/Resources/Documents"
+                IFS='  ' read -r -a array <<< "$CLASSESS"
+                echo 'SUGGESTED IMPORTS:'
+                for i in ${CLASSESS[@]}; do
+                    find . -name $i.html | sed 's/\.\//import /g' | sed 's/\//./g' | sed 's/\.html//g'
+                done
+                popd
+            fi
             popd > /dev/null
-            gedit $FILENAME
             exit
         fi
     done
