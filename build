@@ -1,0 +1,25 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=output-panel
+# Save-files=all
+# Comment=Run "make" in the document directory
+# Applicability=local
+# Shortcut=<Control>F8
+# Name=Build
+# Input=nothing
+# Languages=c,c-sharp,cpp,cpphdr
+
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+while test "$DIR" != "/"; do
+    for m in GNUmakefile makefile Makefile; do
+        if [ -f "${DIR}/${m}" ]; then
+            echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#" > /dev/stderr
+            make -C "${DIR}"
+            exit
+        fi
+    done
+    DIR=`dirname "${DIR}"`
+done
+echo "No Makefile found!" > /dev/stderr
