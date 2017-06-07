@@ -1,11 +1,12 @@
 #!/bin/sh
 # [Gedit Tool]
-# Name=Build+Debug Gradle
-# Input=nothing
+# Output=output-panel
+# Save-files=all
 # Applicability=all
 # Shortcut=<Primary>7
-# Save-files=all
-# Output=output-panel
+# Name=Build+Debug Gradle
+# Input=nothing
+# Languages=java
 
 
 EHOME=`echo $HOME | sed "s/#/\#/"`

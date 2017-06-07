@@ -1,11 +1,11 @@
 #!/bin/sh
 # [Gedit Tool]
-# Input=nothing
-# Output=output-panel
-# Save-files=nothing
 # Shortcut=<Primary><Alt>space
-# Name=Analyze-PMD
+# Save-files=nothing
 # Applicability=all
+# Output=output-panel
+# Name=Analyze-PMD
+# Input=nothing
 
 gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
 if (( $? == 0 )) ; then
@@ -35,12 +35,14 @@ fi
 if [[ $SEL_RULES == "" ]]; then
     exit
 fi
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
 DIR=$GEDIT_CURRENT_DOCUMENT_DIR
 while test "$DIR" != "/"; do
         for m in GNUmakefile makefile Makefile gradlew Gradle; do
                 if [ -f "${DIR}/${m}" ]; then
                         echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#" > /dev/stderr
-                        find ${DIR} -name build -type d | xargs rm -r
+                        find ${DIR} -name build -type d -delete
                         IFS='|' read -r -a rules <<< `echo $SEL_RULES`
                         echo -e "Executing the subsequent analysis: "${rules[@]}"\n\n" > $FILENAME
                         for rule in ${rules[@]}; do
