@@ -18,18 +18,26 @@ while test "$DIR" != "/"; do
             echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#"
             pushd "${DIR}" > /dev/null
             #./gradlew assembleDebug  2>&1 | grep "error:" | awk '{print $1}' | cut -d ":" -f 1 | uniq
-            ./gradlew assembleDebug  2>&1 | grep "error:" | uniq > $FILENAME
+            ./gradlew assembleDebug  2>&1 | uniq > $FILENAME
             cat $FILENAME  | grep 'cannot find symbol'
             if (( $? == 0 )); then
-                CLASSESS=($(cat /tmp/test | grep 'symbol:' | awk '{print $3}'))
-                pushd "$HOME/.local/share/Zeal/Zeal/docsets/Java_SE8.docset/Contents/Resources/Documents"
+                CLASSESS=($(cat $FILENAME | grep 'symbol:' | awk '{print $3}'))
+                pushd "$HOME/.local/share/Zeal/Zeal/docsets/" > /dev/null
                 IFS='  ' read -r -a array <<< "$CLASSESS"
                 echo 'SUGGESTED IMPORTS:'
                 for i in ${CLASSESS[@]}; do
-                    find . -name $i.html | sed 's/\.\//import /g' | sed 's/\//./g' | sed 's/\.html//g'
+                    IMPORT=($(find . -name $i.html | sed 's/.*Contents\///g' | sed 's/class-use\///g' | sort | uniq))
+                    for import in ${IMPORT[@]}; do
+                        if [[ $import = *"reference"* ]]; then 
+                            echo $import | sed 's/.*\/reference\//import /g' | sed 's/\//./g' | sed 's/\.html//g';
+                        else
+                            echo $import | sed 's/.*\/Documents\//import /g' | sed 's/\//./g' | sed 's/\.html//g'; 
+                        fi
+                    done
                 done
-                popd
+                popd > /dev/null
             fi
+            gedit $FILENAME
             popd > /dev/null
             exit
         fi
