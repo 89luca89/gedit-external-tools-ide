@@ -29,9 +29,9 @@ popd
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
-echo "alias s='fzf -x'
-alias gs='fzf -x | xargs gedit'" >> ~/.bashrc
+echo "alias s='fzf'
+alias gs='fzf | xargs gedit'" >> ~/.bashrc
 
-gsettings set org.gnome.gedit.plugins active-plugins "['textsize', 'git', 'charmap', 'terminal', 'filebrowser', 'pythonconsole', 'snippets', 'beesu', 'smartspaces', 'bookmarks', 'wordcompletion', 'codecomment', 'synctex', 'findinfiles', 'multiedit', 'quickopen', 'commander', 'drawspaces', 'time', 'colorpicker', 'externaltools', 'modelines', 'colorschemer', 'sort', 'joinlines', 'spell', 'zeitgeist', 'bracketcompletion', 'docinfo', 'scroll_past', 'gracer', 'sourcecodebrowser', 'panel_toggler', 'darktheme', 'auto-complete', 'mdoutline', 'multicursor', 'controlyourtabs', 'reflow', 'gtagJump']"
+gsettings set org.gnome.gedit.plugins active-plugins "['textsize', 'git', 'charmap', 'terminal', 'filebrowser', 'pythonconsole', 'snippets', 'beesu', 'smartspaces', 'bookmarks', 'wordcompletion', 'codecomment', 'synctex', 'findinfiles', 'multiedit', 'quickopen', 'commander', 'drawspaces', 'time', 'colorpicker', 'externaltools', 'modelines', 'colorschemer', 'sort', 'joinlines', 'spell', 'zeitgeist', 'bracketcompletion', 'docinfo', 'scroll_past', 'gracer', 'sourcecodebrowser', 'panel_toggler', 'darktheme', 'auto-complete', 'addiks-phpide', 'mdoutline', 'multicursor', 'controlyourtabs', 'reflow', 'gtagJump']"
 ```
 
