@@ -1,11 +1,11 @@
 #!/bin/sh
 # [Gedit Tool]
-# Input=nothing
-# Output=output-panel
-# Save-files=nothing
-# Shortcut=<Primary>t
 # Name=TODO-List
+# Shortcut=<Primary><Shift><Alt>l
 # Applicability=all
+# Save-files=nothing
+# Output=output-panel
+# Input=nothing
 
 
 EHOME=`echo $HOME | sed "s/#/\#/"`
