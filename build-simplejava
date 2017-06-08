@@ -1,0 +1,45 @@
+#!/bin/sh
+# [Gedit Tool]
+# Applicability=all
+# Name=Build-SImpleJava
+# Shortcut=<Primary>6
+# Languages=java
+# Save-files=nothing
+# Output=output-panel
+# Input=nothing
+
+#Compiles the current open Java source file.
+
+EHOME=`echo $HOME | sed "s/#/\#/"`
+DIR=$GEDIT_CURRENT_DOCUMENT_DIR
+FILENAME=/tmp/errors-$(date "+%F-%T").log
+IMPORTSFILE=/tmp/errors-$(date "+%F-%T").imports
+echo "Compiling: " $GEDIT_CURRENT_DOCUMENT_PATH
+echo '--------------------'
+javac $GEDIT_CURRENT_DOCUMENT_PATH 2> $FILENAME
+cat $FILENAME  | grep 'cannot find symbol'
+if (( $? == 0 )); then
+    CLASSESS=($(cat $FILENAME | grep 'symbol:' | awk '{print $3}'))
+    pushd "$HOME/.local/share/Zeal/Zeal/docsets/" > /dev/null
+    IFS='  ' read -r -a array <<< "$CLASSESS"
+    echo 'SUGGESTED IMPORTS:'
+    for i in ${CLASSESS[@]}; do
+        IMPORT=($(find {Android*,Java*} -name $i.html | sed 's/.*Contents\///g' | sed 's/class-use\///g' | sort | uniq))
+        for import in ${IMPORT[@]}; do
+            if [[ $import = *"reference"* ]]; then 
+                echo $import | sed 's/.*\/reference\//import /g' | sed 's/\//./g' | sed 's/\.html/;/g' >> $IMPORTSFILE
+            else
+                echo $import | sed 's/.*\/Documents\//import /g' | sed 's/\//./g' | sed 's/\.html/;/g' >> $IMPORTSFILE
+            fi
+        done
+    done
+    popd > /dev/null
+    cat $IMPORTSFILE | sort | uniq
+    rm $IMPORTSFILE
+fi
+if (( $(cat $FILENAME | wc -l) > 0 )); then
+    gedit $FILENAME
+fi
+popd > /dev/null
+rm -f $FILENAME
+exit
