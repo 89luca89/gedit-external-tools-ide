@@ -1,15 +1,15 @@
 #!/bin/sh
 # [Gedit Tool]
 # Output=new-document
-# Name=Run command
-# Save-files=nothing
 # Applicability=all
 # Input=nothing
 # Languages=
-# Comment=Execute a custom command and put its output in a new document
 # Shortcut=<Primary><Alt>1
+# Comment=Execute a custom command and put its output in a new document
+# Save-files=nothing
+# Name=Run command
 
-gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark > /dev/null
 if (( $? == 0 )) ; then
     export GTK_THEME=Adwaita:dark
 fi

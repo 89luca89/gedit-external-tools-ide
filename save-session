@@ -1,13 +1,13 @@
 #!/bin/sh
 # [Gedit Tool]
-# Name=Session Save
-# Save-files=all
+# Output=nothing
 # Applicability=all
 # Input=document
-# Output=nothing
 # Shortcut=<Primary><Alt>s
+# Save-files=all
+# Name=Session Save
 
-gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark > /dev/null
 if (( $? == 0 )) ; then
     export GTK_THEME=Adwaita:dark
 fi

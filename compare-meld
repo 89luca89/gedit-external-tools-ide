@@ -1,11 +1,11 @@
 #!/bin/sh
 # [Gedit Tool]
-# Name=Compare Meld
-# Save-files=nothing
+# Output=output-panel
 # Applicability=all
 # Input=document
-# Output=output-panel
 # Shortcut=<Primary><Alt>m
+# Save-files=nothing
+# Name=Compare Meld
 
 # [Gedit Tool]
 # Name=[info] compare files (meld)
@@ -25,7 +25,7 @@
 #
 # by GNOME wiki <http://live.gnome.org/Gedit/ExternalToolsPluginCommands#Comparing_Files>, edited by (you?)
 
-gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark > /dev/null
 if (( $? == 0 )) ; then
     export GTK_THEME=Adwaita:dark
 fi

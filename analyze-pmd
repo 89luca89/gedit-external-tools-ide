@@ -1,13 +1,13 @@
 #!/bin/sh
 # [Gedit Tool]
+# Output=output-panel
+# Applicability=all
+# Input=nothing
 # Shortcut=<Primary><Alt>space
 # Save-files=nothing
-# Applicability=all
-# Output=output-panel
 # Name=Analyze-PMD
-# Input=nothing
 
-gsettings get org.gnome.gedit.plugins active-plugins | grep dark-theme > /dev/null
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark > /dev/null
 if (( $? == 0 )) ; then
         export GTK_THEME=Adwaita:dark
 fi
