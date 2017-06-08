@@ -1,0 +1,14 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=output-panel
+# Save-files=nothing
+# Shortcut=<Primary>e
+# Input=nothing
+# Applicability=all
+# Name=SearchFile
+
+gsettings get org.gnome.gedit.plugins active-plugins | grep dark > /dev/null
+if (( $? == 0 )) ; then
+    export GTK_THEME=Adwaita:dark;
+fi
+gnome-terminal -x sh -c "$HOME/.fzf/bin/fzf | xargs gedit"
