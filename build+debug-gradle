@@ -12,13 +12,16 @@
 EHOME=`echo $HOME | sed "s/#/\#/"`
 DIR=$GEDIT_CURRENT_DOCUMENT_DIR
 FILENAME=/tmp/errors-$(date "+%F-%T").log
+IMPORTSFILE=/tmp/errors-$(date "+%F-%T").imports
+rm -f $FILENAME
+rm -f $IMPORTSFILE
 while test "$DIR" != "/"; do
     for m in gradlew ; do
         if [ -f "${DIR}/${m}" ]; then
             echo "Using ${m} from ${DIR}" | sed "s#$EHOME#~#"
             pushd "${DIR}" > /dev/null
             #./gradlew assembleDebug  2>&1 | grep "error:" | awk '{print $1}' | cut -d ":" -f 1 | uniq
-            ./gradlew assembleDebug  2>&1 | uniq > $FILENAME
+            ./gradlew assembleDebug  2> $FILENAME
             cat $FILENAME  | grep 'cannot find symbol'
             if (( $? == 0 )); then
                 CLASSESS=($(cat $FILENAME | grep 'symbol:' | awk '{print $3}'))
@@ -26,19 +29,24 @@ while test "$DIR" != "/"; do
                 IFS='  ' read -r -a array <<< "$CLASSESS"
                 echo 'SUGGESTED IMPORTS:'
                 for i in ${CLASSESS[@]}; do
-                    IMPORT=($(find . -name $i.html | sed 's/.*Contents\///g' | sed 's/class-use\///g' | sort | uniq))
+                    IMPORT=($(find {Android*,Java*} -name $i.html | sed 's/.*Contents\///g' | sed 's/class-use\///g' | sort | uniq))
                     for import in ${IMPORT[@]}; do
                         if [[ $import = *"reference"* ]]; then 
-                            echo $import | sed 's/.*\/reference\//import /g' | sed 's/\//./g' | sed 's/\.html//g';
+                            echo $import | sed 's/.*\/reference\//import /g' | sed 's/\//./g' | sed 's/\.html/;/g' >> $IMPORTSFILE
                         else
-                            echo $import | sed 's/.*\/Documents\//import /g' | sed 's/\//./g' | sed 's/\.html//g'; 
+                            echo $import | sed 's/.*\/Documents\//import /g' | sed 's/\//./g' | sed 's/\.html/;/g' >> $IMPORTSFILE
                         fi
                     done
                 done
                 popd > /dev/null
+                cat $IMPORTSFILE | sort | uniq
+                rm $IMPORTSFILE
             fi
-            gedit $FILENAME
+            if (( $(cat $FILENAME | wc -l) > 0 )); then
+                gedit $FILENAME
+            fi
             popd > /dev/null
+            rm -f $FILENAME
             exit
         fi
     done
