@@ -32,6 +32,9 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 echo "alias s='fzf'
 alias gs='fzf | xargs gedit'" >> ~/.bashrc
 
+wget https://raw.githubusercontent.com/ilogue/docker.lang/master/docker.lang -O  ~/.local/share/gtksourceview-3.0/language-specs/docker.lang
+
+
 gsettings set org.gnome.gedit.plugins active-plugins "['textsize', 'git', 'charmap', 'terminal', 'filebrowser', 'pythonconsole', 'snippets', 'beesu', 'smartspaces', 'bookmarks', 'wordcompletion', 'codecomment', 'synctex', 'findinfiles', 'multiedit', 'quickopen', 'commander', 'drawspaces', 'time', 'colorpicker', 'externaltools', 'modelines', 'colorschemer', 'sort', 'joinlines', 'spell', 'zeitgeist', 'bracketcompletion', 'docinfo', 'scroll_past', 'gracer', 'sourcecodebrowser', 'panel_toggler', 'darktheme', 'auto-complete', 'addiks-phpide', 'mdoutline', 'multicursor', 'controlyourtabs', 'reflow', 'gtagJump']"
 ```
 
