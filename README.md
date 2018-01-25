@@ -2,6 +2,9 @@
 # PLUGIN SETUP
 
 ```
+pip3 install pyflakes
+pip3 install pycodestyle
+
 mkdir -p ~/.local/share/gedit/plugins/
 pushd ~/.local/share/gedit/plugins/
 
@@ -17,9 +20,16 @@ git clone https://github.com/dinkel/gedit-zoom
 git clone https://github.com/jessecrossen/Gedit-MultiCursor
 git clone https://github.com/toobaz/gedit-source-code-browser/
 git clone https://github.com/utisam/gtagJump.git
-https://github.com/pallabpain/code-autocomplete-gedit3
-https://github.com/addiks/gedit-phpide
+git clone https://github.com/rdunklau/Gedit-checkpython.git
 
+popd
+
+
+pushd ~/Programs/
+wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F5.8.1/pmd-bin-5.8.1.zip
+unzip pmd-bin-5.8.1.zip
+rm pmd-bin-5.8.1.zip
+mv pmd-bin* pmd-bin
 popd
 
 mkdir -p ~/.config/gedit/tools/
@@ -29,12 +39,9 @@ popd
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
-echo "alias s='fzf'
-alias gs='fzf | xargs gedit'" >> ~/.bashrc
+echo "alias s='fzf -x'
+alias gs='fzf -x | xargs gedit'" >> ~/.bashrc
 
-wget https://raw.githubusercontent.com/ilogue/docker.lang/master/docker.lang -O  ~/.local/share/gtksourceview-3.0/language-specs/docker.lang
-
-
-gsettings set org.gnome.gedit.plugins active-plugins "['textsize', 'git', 'charmap', 'terminal', 'filebrowser', 'pythonconsole', 'snippets', 'beesu', 'smartspaces', 'bookmarks', 'wordcompletion', 'codecomment', 'synctex', 'findinfiles', 'multiedit', 'quickopen', 'commander', 'drawspaces', 'time', 'colorpicker', 'externaltools', 'modelines', 'colorschemer', 'sort', 'joinlines', 'spell', 'zeitgeist', 'bracketcompletion', 'docinfo', 'scroll_past', 'gracer', 'sourcecodebrowser', 'panel_toggler', 'darktheme', 'auto-complete', 'addiks-phpide', 'mdoutline', 'multicursor', 'controlyourtabs', 'reflow', 'gtagJump']"
+gsettings set org.gnome.gedit.plugins active-plugins "['docinfo', 'snippets', 'pythonconsole', 'smartspaces', 'synctex', 'bracketcompletion', 'bookmarks', 'commander', 'multiedit', 'textsize', 'externaltools', 'filebrowser', 'colorschemer', 'findinfiles', 'terminal', 'latex', 'codecomment', 'git', 'quickopen', 'sort', 'colorpicker', 'drawspaces', 'joinlines', 'time', 'spell', 'modelines', 'wordcompletion', 'charmap', 'mdoutline', 'gracer', 'darktheme', 'multicursor', 'gtagJump', 'scroll_past', 'sourcecodebrowser', 'panel_toggler', 'controlyourtabs', 'reflow']"
 ```
 
